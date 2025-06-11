@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز موعد - عيادة الرازي الإلكترونية</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .booking-container {
+            max-width: 800px;
+            margin: 120px auto 50px;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .booking-title {
+            text-align: center;
+            color: #2c5aa0;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #2c5aa0;
+            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+        }
+        
+        .doctor-schedule-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .patient-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .booking-container {
+                margin: 100px 20px 30px;
+                padding: 30px 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>عيادة الرازي الإلكترونية</span>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="index.html" class="nav-link">الرئيسية</a></li>
+                    <li class="nav-item"><a href="doctors.html" class="nav-link">الأطباء</a></li>
+                    <li class="nav-item"><a href="services.html" class="nav-link">الخدمات</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link">اتصل بنا</a></li>
+                    <li class="nav-item"><a href="rand.html" class="nav-link active">حجز موعد</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="booking-container">
+        <h1 class="booking-title">
+            <i class="fas fa-calendar-check"></i>
+            حجز موعد طبي
+        </h1>
+        
+        <div id="alert" class="alert"></div>
+        
+        <form id="bookingForm">
+            <!-- معلومات المريض -->
+            <div class="patient-info">
+                <h3 style="color: #2c5aa0; margin-bottom: 20px;">
+                    <i class="fas fa-user"></i> معلومات المريض
+                </h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientName">الاسم الكامل *</label>
+                        <input type="text" id="patientName" name="patientName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف *</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" required placeholder="218920000000">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">العمر</label>
+                        <input type="number" id="age" name="age" class="form-control" min="1" max="120">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender">الجنس</label>
+                        <select id="gender" name="gender" class="form-control">
+                            <option value="">اختر الجنس</option>
+                            <option value="male">ذكر</option>
+                            <option value="female">أنثى</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- اختيار الطبيب والعيادة -->
+            <h3 style="color: #2c5aa0; margin-bottom: 20px;">
+                <i class="fas fa-stethoscope"></i> اختيار الطبيب والتخصص
+            </h3>
+            
+            <div class="form-group">
+                <label for="doctor">اختر الطبيب *</label>
+                <select id="doctor" name="doctor" class="form-control" required onchange="updateSchedule()">
+                    <option value="">اختر الطبيب والتخصص</option>
+                    <option value="saleh_lafi" data-specialty="طب الباطنة والقلب">د. صالح اللافي - أخصائي طب الباطنة والقلب</option>
+                    <option value="aisha_dabach" data-specialty="طب الأطفال">د. عائشة الدباح - أخصائية طب الأطفال</option>
+                    <option value="abdulaziz_dabar" data-specialty="جراحة العظام">د. عبدالعزيز الدبار - أخصائي جراحة العظام</option>
+                </select>
+                
+                <div id="scheduleInfo" class="doctor-schedule-info" style="display: none;">
+                    <!-- سيتم عرض مواعيد الطبيب هنا -->
+                </div>
+            </div>
+
+            <!-- اختيار التاريخ والوقت -->
+            <h3 style="color: #2c5aa0; margin-bottom: 20px;">
+                <i class="fas fa-calendar-alt"></i> اختيار التاريخ والوقت
+            </h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="appointmentDate">تاريخ الموعد *</label>
+                    <input type="date" id="appointmentDate" name="appointmentDate" class="form-control" required onchange="updateAvailableTimes()">
+                </div>
+                
+                <div class="form-group">
+                    <label for="appointmentTime">وقت الموعد *</label>
+                    <select id="appointmentTime" name="appointmentTime" class="form-control" required>
+                        <option value=""> الفترة الصباحية</option>
+                                                <option value="">الفترة المسائية </option>
+                                                
+                    </select>
+                </div>
+            </div>
+
+            <!-- ملاحظات إضافية -->
+            <div class="form-group">
+                <label for="notes">ملاحظات أو أعراض (اختياري)</label>
+                <textarea id="notes" name="notes" class="form-control" rows="4" placeholder="اكتب أي ملاحظات أو أعراض تريد إبلاغ الطبيب بها..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-check-circle"></i>
+                تأكيد حجز الموعد
+            </button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>عيادة الرازي الإلكترونية</h3>
+                <p>نقدم أفضل الخدمات الطبية بأحدث التقنيات وأمهر الأطباء المتخصصين</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/moftah.alfadil"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.facebook.com/moftah.alfadil"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.facebook.com/moftah.alfadil"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/moftah.alfadil"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>الصفحات</h3>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="doctors.html">الأطباء</a></li>
+                    <li><a href="services.html">الخدمات</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                    <li><a href="rand.html">حجز موعد</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>معلومات التواصل</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-phone"></i> 218920000000+</p>
+                    <p><i class="fas fa-envelope"></i> info@alrazi.ly</p>
+                    <p><i class="fas fa-map-marker-alt"></i> بني وليد | ليبيا</p>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>ساعات العمل</h3>
+                <div class="working-hours">
+                    <p>السبت - الخميس: 8:00 ص - 10:00 م</p>
+                    <p>الجمعة: 2:00 م - 10:00 م</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 عيادة الرازي الإلكترونية. جميع الحقوق محفوظة | مفتاح عبدالقادر</p>
+        </div>
+    </footer>
+
+    <script>
+        // بيانات الأطباء ومواعيدهم
+        const doctorsSchedule = {
+            'saleh_lafi': {
+                name: 'د. صالح اللافي',
+                specialty: 'أخصائي طب الباطنة والقلب',
+                schedule: {
+                    'saturday': { times: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30'] },
+                    'sunday': { times: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30'] },
+                    'monday': { times: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30'] },
+                    'tuesday': { times: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30'] },
+                    'wednesday': { times: ['16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'] },
+                    'thursday': { times: ['16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'] }
+                },
+                info: 'السبت - الثلاثاء: 9:00 ص - 2:00 م | الأربعاء - الخميس: 4:00 م - 9:00 م'
+            },
+            'aisha_dabach': {
+                name: 'د. عائشة الدباح',
+                specialty: 'أخصائية طب الأطفال',
+                schedule: {
+                    'sunday': { times: ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30'] },
+                    'monday': { times: ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30'] },
+                    'tuesday': { times: ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30'] },
+                    'wednesday': { times: ['15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'] },
+                    'thursday': { times: ['15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'] },
+                    'friday': { times: ['15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'] }
+                },
+                info: 'الأحد - الثلاثاء: 8:00 ص - 1:00 م | الأربعاء - الجمعة: 3:00 م - 8:00 م'
+            },
+            'abdulaziz_dabar': {
+                name: 'د. عبدالعزيز الدبار',
+                specialty: 'أخصائي جراحة العظام',
+                schedule: {
+                    'saturday': { times: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30'] },
+                    'sunday': { times: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30'] },
+                    'monday': { times: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30'] },
+                    'tuesday': { times: ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'] },
+                    'wednesday': { times: ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'] },
+                    'thursday': { times: ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'] }
+                },
+                info: 'السبت - الاثنين: 10:00 ص - 3:00 م | الثلاثاء - الخميس: 5:00 م - 10:00 م'
+            }
+        };
+
+        // تحديث معلومات جدول الطبيب
+        function updateSchedule() {
+            const doctorSelect = document.getElementById('doctor');
+            const scheduleInfo = document.getElementById('scheduleInfo');
+            const timeSelect = document.getElementById('appointmentTime');
+            
+            if (doctorSelect.value) {
+                const doctor = doctorsSchedule[doctorSelect.value];
+                scheduleInfo.innerHTML = `
+                    <strong>${doctor.name}</strong><br>
+                    <span style="color: #4CAF50;">${doctor.specialty}</span><br>
+                    <strong>أوقات العمل:</strong> ${doctor.info}
+                `;
+                scheduleInfo.style.display = 'block';
+            } else {
+                scheduleInfo.style.display = 'none';
+            }
+            
+            // مسح الأوقات المختارة
+            timeSelect.innerHTML = '<option value="">اختر الوقت</option>';
+        }
+
+        // تحديث الأوقات المتاحة حسب التاريخ والطبيب
+        function updateAvailableTimes() {
+            const doctorSelect = document.getElementById('doctor');
+            const dateInput = document.getElementById('appointmentDate');
+            const timeSelect = document.getElementById('appointmentTime');
+            
+            if (!doctorSelect.value || !dateInput.value) {
+                timeSelect.innerHTML = '<option value="">اختر الوقت</option>';
+                return;
+            }
+            
+            const selectedDate = new Date(dateInput.value);
+            const dayOfWeek = selectedDate.toLocaleDateString('en-US', { weekday: 'lowercase' });
+            const doctor = doctorsSchedule[doctorSelect.value];
+            
+            timeSelect.innerHTML = '<option value="">اختر الوقت</option>';
+            
+            if (doctor.schedule[dayOfWeek]) {
+                doctor.schedule[dayOfWeek].times.forEach(time => {
+                    const option = document.createElement('option');
+                    option.value = time;
+                    option.textContent = time;
+                    timeSelect.appendChild(option);
+                });
+            } else {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'لا توجد مواعيد متاحة في هذا اليوم';
+                option.disabled = true;
+                timeSelect.appendChild(option);
+            }
+        }
+
+        // إعداد التاريخ الأدنى (من اليوم)
+        document.getElementById('appointmentDate').min = new Date().toISOString().split('T')[0];
+
+        // معالجة إرسال النموذج
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // التحقق من صحة البيانات
+            if (!data.patientName || !data.phone || !data.doctor || !data.appointmentDate || !data.appointmentTime) {
+                showAlert('يرجى ملء جميع الحقول المطلوبة', 'error');
+                return;
+            }
+            
+            // محاكاة إرسال البيانات
+            const doctor = doctorsSchedule[data.doctor];
+            const appointmentInfo = `
+                المريض: ${data.patientName}
+                رقم الهاتف: ${data.phone}
+                الطبيب: ${doctor.name}
+                التخصص: ${doctor.specialty}
+                التاريخ: ${data.appointmentDate}
+                الوقت: ${data.appointmentTime}
+                ${data.notes ? 'ملاحظات: ' + data.notes : ''}
+            `;
+            
+            showAlert('تم حجز موعدكم بنجاح! سيتم التواصل معكم قريباً لتأكيد الموعد.', 'success');
+            
+            // مسح النموذج
+            this.reset();
+            updateSchedule();
+            
+            console.log('بيانات الحجز:', appointmentInfo);
+        });
+
+        // عرض الرسائل
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+
+        // Mobile Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }));
+    </script>
+</body>
+</html>
